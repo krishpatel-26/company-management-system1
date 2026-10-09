@@ -1,0 +1,625 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Add Employee | Company Management</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f6fb;
+            color: #172033;
+        }
+
+        header {
+            background: #080b18;
+            color: white;
+            padding: 22px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h2 {
+            font-size: 22px;
+            font-weight: 800;
+        }
+
+        header a {
+            color: white;
+            text-decoration: none;
+        }
+
+        main {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .page-heading {
+            margin-bottom: 25px;
+        }
+
+        .page-heading h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .page-heading p {
+            color: #68738a;
+            line-height: 1.5;
+        }
+
+        .form-card {
+            background: white;
+            padding: 35px;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px #1720330b;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 22px;
+        }
+
+        .section-title {
+            grid-column: 1 / -1;
+            font-size: 19px;
+            font-weight: 700;
+            margin-top: 15px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #e7eaf0;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
+            min-width: 0;
+        }
+
+        label {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #dce1eb;
+            border-radius: 9px;
+            font-size: 15px;
+            background: white;
+            color: #172033;
+        }
+
+        input:focus, select:focus {
+            outline: 2px solid #4f46e5;
+            border-color: transparent;
+        }
+
+        .help-text {
+            font-size: 12px;
+            color: #64748b;
+            line-height: 1.5;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        button {
+            padding: 14px 24px;
+            border: none;
+            border-radius: 9px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .cancel {
+            background: #eef0f6;
+            color: #273047;
+        }
+
+        .submit {
+            background: #4338ca;
+            color: white;
+        }
+
+        .submit:hover {
+            background: #3730a3;
+        }
+
+        #message {
+            margin-top: 20px;
+            font-weight: 600;
+            line-height: 1.6;
+            overflow-wrap: anywhere;
+        }
+
+        .notice {
+            background: #f5f3ff;
+            border: 1px solid #ddd6fe;
+            color: #4338ca;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        @media(max-width: 700px) {
+            header {
+                padding: 20px;
+            }
+
+            main {
+                margin: 20px auto;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section-title {
+                grid-column: auto;
+            }
+
+            .form-card {
+                padding: 22px;
+            }
+
+            .actions {
+                flex-direction: column-reverse;
+            }
+
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h2>COMPANY MANAGEMENT</h2>
+    <a href="/">← Back to Dashboard</a>
+</header>
+
+<main>
+
+    <div class="page-heading">
+        <h1>Add New Employee</h1>
+        <p>
+            Create an employee account using the existing company
+            database and employee management system.
+        </p>
+    </div>
+
+    <div class="form-card">
+
+        <div class="notice">
+            Employee details will be saved through the existing
+            employee API. The original employee creation and audit
+            logging functionality will be used.
+        </div>
+
+        <form id="employeeForm">
+
+            <div class="form-grid">
+
+                <!-- PERSONAL INFORMATION -->
+
+                <div class="section-title">
+                    Personal Information
+                </div>
+
+                <div class="field">
+                    <label for="first_name">First Name *</label>
+                    <input
+                        id="first_name"
+                        name="first_name"
+                        required
+                        maxlength="100"
+                    >
+                </div>
+
+                <div class="field">
+                    <label for="last_name">Last Name *</label>
+                    <input
+                        id="last_name"
+                        name="last_name"
+                        required
+                        maxlength="100"
+                    >
+                </div>
+
+                <div class="field">
+                    <label for="username">Username *</label>
+                    <input
+                        id="username"
+                        name="username"
+                        required
+                        minlength="3"
+                        maxlength="50"
+                        autocomplete="username"
+                    >
+                </div>
+
+                <div class="field">
+                    <label for="email">Email *</label>
+                    <input
+                        id="email"
+                        name="email"
+                        type="email"
+                        required
+                        maxlength="255"
+                    >
+                </div>
+
+                <div class="field">
+                    <label for="password">Initial Password *</label>
+                    <input
+                        id="password"
+                        name="password"
+                        type="password"
+                        required
+                        minlength="8"
+                        autocomplete="new-password"
+                    >
+                    <span class="help-text">
+                        Set a temporary password for the employee.
+                    </span>
+                </div>
+
+                <div class="field">
+                    <label for="phone">Phone</label>
+                    <input
+                        id="phone"
+                        name="phone"
+                        type="tel"
+                        maxlength="30"
+                    >
+                </div>
+
+                <div class="field">
+                    <label for="date_of_birth">Date of Birth</label>
+                    <input
+                        id="date_of_birth"
+                        name="date_of_birth"
+                        type="date"
+                    >
+                </div>
+
+                <div class="field">
+                    <label for="joining_date">Joining Date *</label>
+                    <input
+                        id="joining_date"
+                        name="joining_date"
+                        type="date"
+                        required
+                    >
+                </div>
+
+                <!-- EMPLOYMENT DETAILS -->
+
+                <div class="section-title">
+                    Employment Details
+                </div>
+
+                <div class="field">
+                    <label for="department_id">Department *</label>
+                    <select
+                        id="department_id"
+                        name="department_id"
+                        required
+                    >
+                        <option value="">
+                            Loading departments...
+                        </option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label for="role_id">Role *</label>
+                    <select
+                        id="role_id"
+                        name="role_id"
+                        required
+                    >
+                        <option value="">
+                            Loading roles...
+                        </option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label for="job_title">Job Title *</label>
+                    <input
+                        id="job_title"
+                        name="job_title"
+                        required
+                        maxlength="150"
+                    >
+                </div>
+
+                <div class="field">
+                    <label for="manager_id">
+                        Reporting Manager
+                    </label>
+                    <select
+                        id="manager_id"
+                        name="manager_id"
+                    >
+                        <option value="">No manager</option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label for="account_status">
+                        Account Status *
+                    </label>
+                    <select
+                        id="account_status"
+                        name="account_status"
+                        required
+                    >
+                        <option value="ACTIVE">ACTIVE</option>
+                        <option value="INACTIVE">INACTIVE</option>
+                        <option value="LOCKED">LOCKED</option>
+                        <option value="SUSPENDED">SUSPENDED</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <div id="message" role="status"></div>
+
+            <div class="actions">
+
+                <button
+                    type="button"
+                    class="cancel"
+                    onclick="window.location.href='/'"
+                >
+                    Cancel
+                </button>
+
+                <button
+                    type="submit"
+                    class="submit"
+                    id="submitButton"
+                >
+                    Create Employee
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</main>
+
+<script>
+    const form = document.getElementById("employeeForm");
+    const message = document.getElementById("message");
+    const submitButton = document.getElementById("submitButton");
+
+    function showMessage(text, color) {
+        message.textContent = text;
+        message.style.color = color;
+    }
+
+    // Load the original database's departments, roles,
+    // and employee records for the manager dropdown.
+    async function loadOptions() {
+        try {
+            const responses = await Promise.all([
+                fetch("/api/departments", {
+    headers: {
+        Authorization:
+            "Bearer " +
+            localStorage.getItem("authToken")
+    }
+}),
+
+fetch("/api/roles", {
+    headers: {
+        Authorization:
+            "Bearer " +
+            localStorage.getItem("authToken")
+    }
+}),
+
+fetch("/api/employees", {
+    headers: {
+        Authorization:
+            "Bearer " +
+            localStorage.getItem("authToken")
+    }
+})
+            ]);
+
+            for (const response of responses) {
+                if (!response.ok) {
+                    throw new Error(
+                        "An existing API could not load its data."
+                    );
+                }
+            }
+
+            const departments = await responses[0].json();
+            const roles = await responses[1].json();
+            const employees = await responses[2].json();
+
+            const departmentSelect =
+                document.getElementById("department_id");
+
+            const roleSelect =
+                document.getElementById("role_id");
+
+            const managerSelect =
+                document.getElementById("manager_id");
+
+            departmentSelect.innerHTML =
+                '<option value="">Select department</option>';
+
+            departments.forEach(function(department) {
+                const option = document.createElement("option");
+
+                option.value = department.department_id;
+                option.textContent = department.department_name;
+
+                departmentSelect.appendChild(option);
+            });
+
+            roleSelect.innerHTML =
+                '<option value="">Select role</option>';
+
+            roles.forEach(function(role) {
+                const option = document.createElement("option");
+
+                option.value = role.role_id;
+                option.textContent = role.role_name;
+
+                roleSelect.appendChild(option);
+            });
+
+            managerSelect.innerHTML =
+                '<option value="">No manager</option>';
+
+            employees.forEach(function(employee) {
+                const option = document.createElement("option");
+
+                option.value = employee.employee_id;
+
+                option.textContent =
+                    employee.first_name + " " +
+                    employee.last_name +
+                    " (ID: " + employee.employee_id + ")";
+
+                managerSelect.appendChild(option);
+            });
+
+        } catch (error) {
+            showMessage(
+                "Could not load dropdowns: " + error.message,
+                "#dc2626"
+            );
+        }
+    }
+
+    // Submit through the ORIGINAL employee creation API.
+    // The existing backend performs the insert and audit logging.
+    form.addEventListener("submit", async function(event) {
+        event.preventDefault();
+
+        if (!form.checkValidity()) {
+            form.reportValidity();
+            return;
+        }
+
+        const formData = new FormData(form);
+        const employee = Object.fromEntries(formData.entries());
+
+        employee.department_id =
+            Number(employee.department_id);
+
+        employee.role_id =
+            Number(employee.role_id);
+
+        employee.manager_id =
+            employee.manager_id
+                ? Number(employee.manager_id)
+                : null;
+
+        if (
+            !Number.isInteger(employee.department_id) ||
+            !Number.isInteger(employee.role_id)
+        ) {
+            showMessage(
+                "Select a valid department and role.",
+                "#dc2626"
+            );
+            return;
+        }
+
+        submitButton.disabled = true;
+        submitButton.textContent = "Creating...";
+
+        showMessage(
+            "Submitting employee to the original database...",
+            "#64748b"
+        );
+
+        try {
+            const response = await fetch("/api/employees", {
+                method: "POST",
+                headers: {
+    "Content-Type": "application/json",
+    "Authorization":
+        "Bearer " +
+        localStorage.getItem("authToken")
+},
+                body: JSON.stringify(employee)
+            });
+
+            const result = await response.json();
+
+            if (!response.ok || result.success !== true) {
+                throw new Error(
+                    result.message ||
+                    "The employee could not be created."
+                );
+            }
+
+            showMessage(
+                "Employee created successfully. Employee ID: " +
+                result.employee_id +
+                ". The original API has processed the creation.",
+                "#16a34a"
+            );
+
+            form.reset();
+
+            setTimeout(function() {
+                window.location.href = "/";
+            }, 1800);
+
+        } catch (error) {
+            showMessage(
+                error.message,
+                "#dc2626"
+            );
+        } finally {
+            submitButton.disabled = false;
+            submitButton.textContent = "Create Employee";
+        }
+    });
+
+    loadOptions();
+</script>
+
+</body>
+</html>

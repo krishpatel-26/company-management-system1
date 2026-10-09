@@ -1,0 +1,777 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Employee Management | Company</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Inter, "Segoe UI", Arial, sans-serif;
+    background: #f5f7fb;
+    color: #172033;
+}
+
+.sidebar {
+    width: 240px;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    background: #111827;
+    color: white;
+    padding: 28px 18px;
+}
+
+.brand {
+    font-size: 23px;
+    font-weight: 800;
+    margin-bottom: 42px;
+}
+
+.brand span {
+    color: #818cf8;
+}
+
+.nav-label {
+    color: #8490a6;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    margin: 25px 10px 12px;
+}
+
+.nav-link {
+    display: block;
+    color: #cbd5e1;
+    text-decoration: none;
+    padding: 13px 14px;
+    border-radius: 9px;
+    margin-bottom: 7px;
+    font-size: 14px;
+}
+
+.nav-link.active,
+.nav-link:hover {
+    background: #3730a3;
+    color: white;
+}
+
+.main {
+    margin-left: 240px;
+    padding: 32px;
+}
+
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+    gap: 15px;
+}
+
+.topbar h1 {
+    font-size: 27px;
+    letter-spacing: -0.7px;
+}
+
+.topbar p {
+    color: #758096;
+    margin-top: 7px;
+    font-size: 14px;
+}
+
+.primary-btn {
+    background: #4f46e5;
+    color: white;
+    border: none;
+    padding: 13px 20px;
+    border-radius: 9px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.primary-btn:hover {
+    background: #4338ca;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 18px;
+    margin-bottom: 26px;
+}
+
+.stat-card {
+    background: white;
+    padding: 23px;
+    border-radius: 14px;
+    border: 1px solid #e8ebf2;
+}
+
+.stat-card p {
+    font-size: 13px;
+    color: #758096;
+    margin-bottom: 14px;
+}
+
+.stat-card h2 {
+    font-size: 30px;
+    font-weight: 750;
+}
+
+.stat-card small {
+    display: block;
+    margin-top: 9px;
+    color: #8b95a7;
+}
+
+.panel {
+    background: white;
+    border: 1px solid #e8ebf2;
+    border-radius: 14px;
+    overflow: hidden;
+}
+
+.panel-header {
+    padding: 23px;
+    border-bottom: 1px solid #edf0f5;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+}
+
+.panel-header h2 {
+    font-size: 19px;
+}
+
+.panel-header p {
+    color: #8b95a7;
+    font-size: 13px;
+    margin-top: 7px;
+}
+
+.filters {
+    display: flex;
+    gap: 10px;
+    padding: 20px 23px;
+    flex-wrap: wrap;
+}
+
+.filters input,
+.filters select {
+    padding: 12px 14px;
+    border: 1px solid #dfe4ed;
+    border-radius: 8px;
+    font-size: 14px;
+    background: white;
+    color: #172033;
+    outline: none;
+}
+
+.filters input {
+    flex: 1;
+    min-width: 200px;
+}
+
+.filters input:focus,
+.filters select:focus {
+    border-color: #6366f1;
+}
+
+.table-wrap {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    white-space: nowrap;
+}
+
+th {
+    text-align: left;
+    padding: 15px 22px;
+    font-size: 11px;
+    color: #7c879b;
+    background: #f9fafc;
+    letter-spacing: .6px;
+    text-transform: uppercase;
+}
+
+td {
+    padding: 17px 22px;
+    border-top: 1px solid #edf0f5;
+    font-size: 13px;
+}
+
+tbody tr:hover {
+    background: #fafbff;
+}
+
+.employee {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #e0e7ff;
+    color: #4338ca;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.employee-name {
+    font-weight: 650;
+    color: #202b40;
+}
+
+.employee-email {
+    font-size: 12px;
+    color: #8791a3;
+    margin-top: 5px;
+}
+
+.badge {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.active {
+    color: #047857;
+    background: #d1fae5;
+}
+
+.inactive {
+    color: #b45309;
+    background: #fef3c7;
+}
+
+.view-btn {
+    border: 1px solid #dfe4ed;
+    padding: 8px 13px;
+    background: white;
+    border-radius: 7px;
+    cursor: pointer;
+    font-weight: 600;
+    color: #4f46e5;
+}
+
+.view-btn:hover {
+    background: #eef2ff;
+}
+
+#message {
+    padding: 35px;
+    text-align: center;
+    color: #7c879b;
+}
+
+.footer {
+    padding: 18px 23px;
+    font-size: 12px;
+    color: #8791a3;
+    border-top: 1px solid #edf0f5;
+}
+
+dialog {
+    width: min(520px, 92%);
+    margin: auto;
+    border: none;
+    border-radius: 16px;
+    padding: 28px;
+    box-shadow: 0 25px 80px #0003;
+}
+
+dialog::backdrop {
+    background: #11182780;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 25px;
+    align-items: center;
+}
+
+.modal-header button {
+    border: none;
+    background: #f1f5f9;
+    border-radius: 8px;
+    padding: 9px 13px;
+    cursor: pointer;
+}
+
+.detail {
+    padding: 14px 0;
+    border-bottom: 1px solid #edf0f5;
+}
+
+.detail label {
+    display: block;
+    font-size: 12px;
+    color: #8791a3;
+    margin-bottom: 6px;
+}
+
+.detail strong {
+    font-size: 14px;
+    overflow-wrap: anywhere;
+}
+
+@media (max-width: 1100px) {
+    .stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 700px) {
+    .sidebar {
+        display: none;
+    }
+
+    .main {
+        margin-left: 0;
+        padding: 18px;
+    }
+
+    .topbar {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .stats {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .stat-card {
+        padding: 16px;
+    }
+
+    .stat-card h2 {
+        font-size: 24px;
+    }
+
+    .panel-header {
+        padding: 18px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<aside class="sidebar">
+    <div class="brand">COMPANY<span>.</span></div>
+
+    <div class="nav-label">WORKSPACE</div>
+
+    <a class="nav-link" href="index.html">
+        Dashboard
+    </a>
+
+    <a class="nav-link active" href="employees.html">
+        Employees
+    </a>
+
+    <a class="nav-link" href="add-employee.html">
+        Add Employee
+    </a>
+
+    <a class="nav-link" href="departments.html">
+        Departments
+    </a>
+
+    <a class="nav-link" href="projects.html">
+        Projects
+    </a>
+
+    <a class="nav-link" href="timesheets.html">
+        Timesheets
+    </a>
+    <a class="nav-link" href="projects.html">Projects</a>
+<a class="nav-link" href="timesheets.html">Timesheets</a>
+
+    <div class="nav-label">SYSTEM</div>
+
+    <a class="nav-link" href="settings.html">
+        Settings
+    </a>
+</aside>
+
+<main class="main">
+
+    <header class="topbar">
+        <div>
+            <h1>Employee Directory</h1>
+            <p>Manage your workforce, employee records and organization.</p>
+        </div>
+
+        <a href="add-employee.html" class="primary-btn">
+            + Add Employee
+        </a>
+    </header>
+
+    <section class="stats">
+        <div class="stat-card">
+            <p>Total Employees</p>
+            <h2 id="total">—</h2>
+            <small>All employee records</small>
+        </div>
+
+        <div class="stat-card">
+            <p>Active Employees</p>
+            <h2 id="activeCount">—</h2>
+            <small>Currently active</small>
+        </div>
+
+        <div class="stat-card">
+            <p>Inactive Employees</p>
+            <h2 id="inactiveCount">—</h2>
+            <small>Inactive accounts</small>
+        </div>
+
+        <div class="stat-card">
+            <p>Departments</p>
+            <h2 id="departmentCount">—</h2>
+            <small>Departments represented</small>
+        </div>
+    </section>
+
+    <section class="panel">
+        <div class="panel-header">
+            <div>
+                <h2>All Employees</h2>
+                <p>Search and view employee information.</p>
+            </div>
+        </div>
+
+        <div class="filters">
+            <input
+                type="search"
+                id="search"
+                placeholder="Search name, email, ID or job title..."
+            >
+
+            <select id="departmentFilter">
+                <option value="">All Departments</option>
+            </select>
+
+            <select id="statusFilter">
+                <option value="">All Statuses</option>
+                <option value="ACTIVE">Active</option>
+                <option value="INACTIVE">Inactive</option>
+            </select>
+        </div>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Employee</th>
+                        <th>Department</th>
+                        <th>Job Title</th>
+                        <th>Manager</th>
+                        <th>Joining Date</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody id="employeeTable">
+                    <tr>
+                        <td colspan="7" id="message">
+                            Loading employee records...
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="footer" id="resultCount">
+            Loading records...
+        </div>
+    </section>
+
+</main>
+
+<dialog id="employeeModal">
+    <div class="modal-header">
+        <h2>Employee Details</h2>
+        <button onclick="closeModal()">Close</button>
+    </div>
+    <div id="employeeDetails"></div>
+</dialog>
+
+<script>
+let employees = [];
+
+const table = document.getElementById("employeeTable");
+const search = document.getElementById("search");
+const departmentFilter = document.getElementById("departmentFilter");
+const statusFilter = document.getElementById("statusFilter");
+
+function escapeHTML(value) {
+    return String(value ?? "").replace(/[&<>"']/g, char => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#039;"
+    })[char]);
+}
+
+function formatDate(date) {
+    if (!date) return "—";
+
+    const parsed = new Date(date + "T00:00:00");
+
+    if (Number.isNaN(parsed.getTime())) return "—";
+
+    return parsed.toLocaleDateString("en-IN", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric"
+    });
+}
+
+function initials(employee) {
+    return (
+        (employee.first_name?.[0] || "") +
+        (employee.last_name?.[0] || "")
+    ).toUpperCase() || "E";
+}
+
+async function loadEmployees() {
+    try {
+        const response = await fetch("/api/employees");
+
+        if (!response.ok) {
+            throw new Error("API returned HTTP " + response.status);
+        }
+
+        const data = await response.json();
+
+        if (!Array.isArray(data)) {
+            throw new Error("Expected an employee array from the API.");
+        }
+
+        employees = data;
+
+        document.getElementById("total").textContent =
+            employees.length;
+
+        document.getElementById("activeCount").textContent =
+            employees.filter(e => e.account_status === "ACTIVE").length;
+
+        document.getElementById("inactiveCount").textContent =
+            employees.filter(e => e.account_status === "INACTIVE").length;
+
+        const departments = [
+            ...new Set(employees.map(e => e.department_name).filter(Boolean))
+        ];
+
+        document.getElementById("departmentCount").textContent =
+            departments.length;
+
+        departments.sort().forEach(department => {
+            const option = document.createElement("option");
+            option.value = department;
+            option.textContent = department;
+            departmentFilter.appendChild(option);
+        });
+
+        renderEmployees();
+
+    } catch (error) {
+        console.error(error);
+
+        table.innerHTML = `
+            <tr>
+                <td colspan="7" id="message">
+                    Unable to load employees.
+                    Check that your API server is running.
+                    <br><br>
+                    ${escapeHTML(error.message)}
+                </td>
+            </tr>
+        `;
+
+        document.getElementById("resultCount").textContent =
+            "Could not load records.";
+    }
+}
+
+function renderEmployees() {
+    const query = search.value.trim().toLowerCase();
+    const department = departmentFilter.value;
+    const status = statusFilter.value;
+
+    const filtered = employees.filter(employee => {
+        const fullName =
+            `${employee.first_name || ""} ${employee.last_name || ""}`
+            .toLowerCase();
+
+        const searchable = [
+            employee.employee_id,
+            employee.username,
+            employee.email,
+            employee.job_title,
+            fullName
+        ].join(" ").toLowerCase();
+
+        return (
+            searchable.includes(query) &&
+            (!department || employee.department_name === department) &&
+            (!status || employee.account_status === status)
+        );
+    });
+
+    if (filtered.length === 0) {
+        table.innerHTML = `
+            <tr>
+                <td colspan="7" id="message">
+                    No matching employees found.
+                </td>
+            </tr>
+        `;
+    } else {
+        table.innerHTML = filtered.map(employee => {
+            const name =
+                `${employee.first_name || ""} ${employee.last_name || ""}`
+                .trim();
+
+            const profile = employee.profile_url;
+
+            const avatar = profile
+                ? `<img src="${escapeHTML(profile)}"
+                        alt="Profile"
+                        onerror="this.parentElement.textContent=
+                        this.dataset.initials"
+                        data-initials="${escapeHTML(initials(employee))}">`
+                : escapeHTML(initials(employee));
+
+            return `
+                <tr>
+                    <td>
+                        <div class="employee">
+                            <div class="avatar">${avatar}</div>
+                            <div>
+                                <div class="employee-name">
+                                    ${escapeHTML(name)}
+                                </div>
+                                <div class="employee-email">
+                                    ${escapeHTML(employee.email)}
+                                </div>
+                                <div class="employee-email">
+                                    ID: ${escapeHTML(employee.employee_id)}
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+
+                    <td>${escapeHTML(employee.department_name || "—")}</td>
+
+                    <td>${escapeHTML(employee.job_title || "—")}</td>
+
+                    <td>${escapeHTML(employee.manager_name || "—")}</td>
+
+                    <td>${formatDate(employee.joining_date)}</td>
+
+                    <td>
+                        <span class="badge ${
+                            employee.account_status === "ACTIVE"
+                                ? "active" : "inactive"
+                        }">
+                            ${escapeHTML(employee.account_status)}
+                        </span>
+                    </td>
+
+                    <td>
+                        <button class="view-btn"
+                            onclick="viewEmployee(${Number(employee.employee_id)})">
+                            View
+                        </button>
+                    </td>
+                </tr>
+            `;
+        }).join("");
+    }
+
+    document.getElementById("resultCount").textContent =
+        `Showing ${filtered.length} of ${employees.length} employees`;
+}
+
+function viewEmployee(id) {
+    const employee = employees.find(
+        e => Number(e.employee_id) === Number(id)
+    );
+
+    if (!employee) return;
+
+    const details = [
+        ["Employee ID", employee.employee_id],
+        ["Full Name", `${employee.first_name || ""} ${employee.last_name || ""}`],
+        ["Username", employee.username],
+        ["Email", employee.email],
+        ["Phone", employee.phone],
+        ["Department", employee.department_name],
+        ["Role", employee.role_name],
+        ["Job Title", employee.job_title],
+        ["Manager", employee.manager_name],
+        ["Date of Birth", formatDate(employee.date_of_birth)],
+        ["Joining Date", formatDate(employee.joining_date)],
+        ["Account Status", employee.account_status]
+    ];
+
+    document.getElementById("employeeDetails").innerHTML =
+        details.map(([label, value]) => `
+            <div class="detail">
+                <label>${escapeHTML(label)}</label>
+                <strong>${escapeHTML(value || "—")}</strong>
+            </div>
+        `).join("");
+
+    document.getElementById("employeeModal").showModal();
+}
+
+function closeModal() {
+    document.getElementById("employeeModal").close();
+}
+
+search.addEventListener("input", renderEmployees);
+departmentFilter.addEventListener("change", renderEmployees);
+statusFilter.addEventListener("change", renderEmployees);
+
+loadEmployees();
+</script>
+
+</body>
+</html>
